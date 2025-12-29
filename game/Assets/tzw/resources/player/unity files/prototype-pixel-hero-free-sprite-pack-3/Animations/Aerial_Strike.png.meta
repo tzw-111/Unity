@@ -1,0 +1,369 @@
+fileFormatVersion: 2
+guid: c9d2730b4e531b34193827cecc359b60
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Aerial_Strike_0
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.26698297, y: 0.008077511}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f04d82a7ca219a54c9e13939d9e7c3c4
+      internalID: 779991086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_1
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 0
+        width: 53
+        height: 67
+      alignment: 9
+      pivot: {x: 0.27412328, y: 0.023523718}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71fe2d78de09c644b8aa63c866039685
+      internalID: -850208857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_2
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 0
+        width: 48
+        height: 66
+      alignment: 9
+      pivot: {x: 0.36144128, y: 0.02134286}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf782ce5286787d42b084f1a3d2106a3
+      internalID: -1173495044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_3
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 41
+        height: 66
+      alignment: 9
+      pivot: {x: 0.48377806, y: 0.016304249}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6c1cc379bf83734fad09ffd2a2a7b73
+      internalID: -1005723361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_4
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 0
+        width: 41
+        height: 65
+      alignment: 9
+      pivot: {x: 0.4756678, y: 0.003746709}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fe9e63d4fab4a34086ed0335488738f
+      internalID: 1528614024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_5
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 0
+        width: 48
+        height: 67
+      alignment: 9
+      pivot: {x: 0.10510763, y: 0.013596901}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb07f4305b442ce408fe338502ce864b
+      internalID: -1412682965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_6
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 0
+        width: 55
+        height: 67
+      alignment: 9
+      pivot: {x: 0.07071977, y: 0.01359709}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cedf83ff8d01684d84c55e6fbbd76b1
+      internalID: 643127744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_7
+      rect:
+        serializedVersion: 2
+        x: 945
+        y: 0
+        width: 53
+        height: 67
+      alignment: 9
+      pivot: {x: 0.07334353, y: 0.013596901}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3eccf89809a8744c94a64838d8f8464
+      internalID: 357828688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_8
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 41
+        width: 7
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbe0fd02da2eda644b1193d1d5b71b6c
+      internalID: 1608309083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_9
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 0
+        width: 49
+        height: 67
+      alignment: 9
+      pivot: {x: 0.079233594, y: 0.013596901}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d36e9375d01dde4f811b1161da61229
+      internalID: 1586382368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Aerial_Strike_10
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 36
+        width: 11
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6b53a8797eb01741a67fa500bbfda04
+      internalID: -1853020669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Aerial_Strike_0: 779991086
+      Aerial_Strike_1: -850208857
+      Aerial_Strike_10: -1853020669
+      Aerial_Strike_2: -1173495044
+      Aerial_Strike_3: -1005723361
+      Aerial_Strike_4: 1528614024
+      Aerial_Strike_5: -1412682965
+      Aerial_Strike_6: 643127744
+      Aerial_Strike_7: 357828688
+      Aerial_Strike_8: 1608309083
+      Aerial_Strike_9: 1586382368
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
