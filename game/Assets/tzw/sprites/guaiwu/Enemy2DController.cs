@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Diagnostics;
 
 // 定义敌人的所有状态
 public enum EnemyState
@@ -15,50 +14,59 @@ public enum EnemyState
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class Enemy2DController : MonoBehaviour
 {
-    [Header("basic")]
+    [Header("基础属性")]
     public float maxHealth = 100f;          // 最大生命值
     public float currentHealth;             // 当前生命值
     public float moveSpeed = 2f;            // 移动速度
-    public float patrolRange = 5f;          // 巡逻范围
 
-    [Header("visio")]
-    public float viewDistance = 8f;         // 视野距离
-    public float viewAngle = 90f;           // 视野角度
-    public Transform eyePoint;              // 视野检测点（可选）
+    [Header("二维巡逻设置")]
+    public Vector2 patrolAreaSize = new Vector2(8f, 6f); // 巡逻区域大小（X宽，Y高）
+    private Vector2 currentPatrolTarget;    // 当前要移动的巡逻目标点
+    public float minPatrolWaitTime = 2f;    // 到达目标点后最小等待时间（延长避免闪烁）
+    public float maxPatrolWaitTime = 4f;    // 到达目标点后最大等待时间
+    private float patrolWaitTimer;          // 到达目标点后的等待计时器
+    private bool isWaitingAtPatrolPoint = false; // 是否在目标点等待
+    private Vector2 patrolStartPos;         // 巡逻区域中心点（初始位置）
+
+    [Header("圆形侦测设置")]
+    public float detectRadius = 8f;         // 圆形侦测半径（替代原视野距离）
+    public Transform detectCenter;          // 侦测中心点（可选，默认自身位置）
     public LayerMask targetLayer;           // 目标图层（玩家）
     public LayerMask obstacleLayer;         // 障碍物图层
 
-    [Header("attack")]
+    [Header("攻击设置")]
     public float attackRange = 1.5f;        // 攻击范围
     public float attackDamage = 20f;        // 攻击伤害
     public float attackCooldown = 1f;       // 攻击冷却
     private float lastAttackTime;           // 上次攻击时间
 
-    [Header("be attacked")]
+    [Header("受击设置")]
     public float hurtForce = 5f;            // 受击击退力
     public float hurtDuration = 0.5f;       // 受击状态持续时间
 
-    [Header("die")]
+    [Header("死亡设置")]
     public float deathDestroyDelay = 2f;    // 死亡后销毁延迟
     public GameObject deathEffect;          // 死亡特效（可选）
 
     // 状态和移动相关
     public EnemyState currentState;
     private Rigidbody2D rb;
-    private Vector2 patrolStartPos;
-    private int patrolDirection = 1;        // 巡逻方向：1向右，-1向左
     private Transform target;               // 检测到的目标（玩家）
 
     private void Awake()
     {
         // 获取组件
         rb = GetComponent<Rigidbody2D>();
-        if (eyePoint == null) eyePoint = transform;
+        if (detectCenter == null) detectCenter = transform; // 侦测中心默认自身
 
         // 初始化
         currentHealth = maxHealth;
         patrolStartPos = transform.position;
         lastAttackTime = -attackCooldown;
+        patrolWaitTimer = 0f;
+
+        // 初始化第一个巡逻目标点（添加最小距离限制）
+        currentPatrolTarget = GetRandomPatrolPoint();
     }
 
     private void Update()
@@ -103,28 +111,71 @@ public class Enemy2DController : MonoBehaviour
     }
 
     #region 状态行为逻辑
-    // 巡逻行为
+    // 二维巡逻行为（决策层）
     private void PatrolBehaviour()
     {
-        // 检测是否超出巡逻范围，超出则反转方向
-        float distanceFromStart = Mathf.Abs(transform.position.x - patrolStartPos.x);
-        if (distanceFromStart >= patrolRange)
+        // 如果正在目标点等待，执行等待逻辑
+        if (isWaitingAtPatrolPoint)
         {
-            patrolDirection *= -1;
-            // 修正位置，防止超出范围
-            transform.position = new Vector2(
-                patrolStartPos.x + patrolRange * Mathf.Sign(patrolDirection),
-                transform.position.y
+            patrolWaitTimer += Time.deltaTime;
+            // 等待时间足够，生成新目标点并结束等待
+            if (patrolWaitTimer >= UnityEngine.Random.Range(minPatrolWaitTime, maxPatrolWaitTime))
+            {
+                currentPatrolTarget = GetRandomPatrolPoint();
+                isWaitingAtPatrolPoint = false;
+                patrolWaitTimer = 0f;
+            }
+            return;
+        }
+
+        // 计算与当前巡逻目标点的距离
+        float distanceToTarget = Vector2.Distance(transform.position, currentPatrolTarget);
+        // 到达目标点（距离小于0.1，避免精度问题）
+        if (distanceToTarget <= 0.1f)
+        {
+            isWaitingAtPatrolPoint = true; // 开始等待
+            rb.velocity = Vector2.zero;    // 停止移动
+        }
+    }
+
+    // 二维巡逻移动（执行层，修复旋转/闪烁问题）
+    private void PatrolMovement()
+    {
+        // 等待时不移动
+        if (isWaitingAtPatrolPoint) return;
+
+        // 计算朝向目标点的方向（归一化，保证移动速度一致）
+        Vector2 moveDirection = (currentPatrolTarget - (Vector2)transform.position).normalized;
+
+        // 控制刚体移动（二维方向，速度由moveSpeed决定）
+        rb.velocity = moveDirection * moveSpeed;
+
+        // 横版游戏适配：仅左右翻转Sprite，不旋转
+        if (moveDirection.x != 0)
+        {
+            transform.localScale = new Vector3(
+                Mathf.Abs(transform.localScale.x) * Mathf.Sign(moveDirection.x),
+                transform.localScale.y,
+                transform.localScale.z
             );
         }
     }
 
-    // 巡逻移动
-    private void PatrolMovement()
+    // 生成随机巡逻点（添加最小距离限制，避免闪烁）
+    private Vector2 GetRandomPatrolPoint()
     {
-        rb.velocity = new Vector2(patrolDirection * moveSpeed, rb.velocity.y);
-        // 翻转敌人朝向
-        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * patrolDirection, transform.localScale.y, transform.localScale.z);
+        Vector2 randomPoint;
+        float minDistance = 2f; // 目标点与当前位置的最小距离
+        do
+        {
+            // 计算随机X坐标：patrolStartPos.x ± patrolAreaSize.x/2
+            float randomX = patrolStartPos.x + UnityEngine.Random.Range(-patrolAreaSize.x / 2, patrolAreaSize.x / 2);
+            // 计算随机Y坐标：patrolStartPos.y ± patrolAreaSize.y/2
+            float randomY = patrolStartPos.y + UnityEngine.Random.Range(-patrolAreaSize.y / 2, patrolAreaSize.y / 2);
+            randomPoint = new Vector2(randomX, randomY);
+        } while (Vector2.Distance(transform.position, randomPoint) < minDistance);
+
+        return randomPoint;
     }
 
     // 追击行为
@@ -134,19 +185,28 @@ public class Enemy2DController : MonoBehaviour
         if (target == null) return;
     }
 
-    // 追击移动
+    // 追击移动（二维方向，持续追击玩家）
     private void ChaseMovement()
     {
         if (target == null) return;
 
-        // 计算朝向目标的方向
-        float direction = Mathf.Sign(target.position.x - transform.position.x);
-        rb.velocity = new Vector2(direction * moveSpeed * 1.5f, rb.velocity.y); // 追击速度比巡逻快50%
-        // 翻转朝向
-        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * direction, transform.localScale.y, transform.localScale.z);
+        // 计算朝向目标的方向（归一化）
+        Vector2 moveDirection = ((Vector2)target.position - (Vector2)transform.position).normalized;
+        // 追击速度比巡逻快50%
+        rb.velocity = moveDirection * moveSpeed * 1.5f;
+
+        // 追击时仅左右翻转Sprite
+        if (moveDirection.x != 0)
+        {
+            transform.localScale = new Vector3(
+                Mathf.Abs(transform.localScale.x) * Mathf.Sign(moveDirection.x),
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
     }
 
-    // 攻击行为
+    // 攻击行为（持续攻击，直到玩家脱离范围）
     private void AttackBehaviour()
     {
         if (target == null) return;
@@ -157,6 +217,9 @@ public class Enemy2DController : MonoBehaviour
             AttackTarget();
             lastAttackTime = Time.time;
         }
+
+        // 攻击时停止移动，避免贴脸抖动
+        rb.velocity = Vector2.zero;
     }
 
     // 执行攻击
@@ -172,7 +235,7 @@ public class Enemy2DController : MonoBehaviour
             {
                 playerHealth.TakeDamage(attackDamage);
                 // 可以在这里添加攻击动画、音效等
-                //Debug.Log("敌人攻击了玩家，造成" + attackDamage + "点伤害");
+                UnityEngine.Debug.Log("敌人攻击了玩家，造成" + attackDamage + "点伤害");
             }
         }
     }
@@ -184,7 +247,7 @@ public class Enemy2DController : MonoBehaviour
 
         // 扣血
         currentHealth -= damage;
-        //Debug.Log("敌人受击，剩余生命值：" + currentHealth);
+        UnityEngine.Debug.Log("敌人受击，剩余生命值：" + currentHealth);
 
         // 血量小于等于0则死亡
         if (currentHealth <= 0)
@@ -206,10 +269,10 @@ public class Enemy2DController : MonoBehaviour
     private IEnumerator ExitHurtState()
     {
         yield return new WaitForSeconds(hurtDuration);
-        // 受击结束后回到巡逻或追击状态
+        // 受击结束后回到追击/攻击（如果玩家还在范围）或巡逻
         if (currentState != EnemyState.Dead)
         {
-            currentState = IsTargetInView() ? EnemyState.Chase : EnemyState.Patrol;
+            currentState = IsPlayerInDetectRange() ? (IsPlayerInAttackRange() ? EnemyState.Attack : EnemyState.Chase) : EnemyState.Patrol;
         }
     }
 
@@ -230,11 +293,11 @@ public class Enemy2DController : MonoBehaviour
 
         // 延迟销毁
         Destroy(gameObject, deathDestroyDelay);
-        //Debug.Log("badpeople die");
+        UnityEngine.Debug.Log("敌人死亡");
     }
     #endregion
 
-    #region 状态切换检测
+    #region 状态切换检测（核心修改：圆形侦测+持续攻击）
     private void CheckStateTransitions()
     {
         // 1. 检测是否死亡（优先级最高）
@@ -247,103 +310,89 @@ public class Enemy2DController : MonoBehaviour
         // 2. 受击状态下不切换其他状态
         if (currentState == EnemyState.Hurt) return;
 
-        // 3. 检测是否有目标在视野内
-        bool hasTargetInView = IsTargetInView();
+        // 3. 检测玩家是否在圆形侦测范围内（核心修改）
+        bool isPlayerInDetect = IsPlayerInDetectRange();
 
-        // 4. 检测目标是否在攻击范围内
-        bool isTargetInAttackRange = hasTargetInView && Vector2.Distance(transform.position, target.position) <= attackRange;
+        // 4. 检测玩家是否在攻击范围内
+        bool isPlayerInAttack = isPlayerInDetect && IsPlayerInAttackRange();
 
-        // 状态切换逻辑
-        if (isTargetInAttackRange)
+        // 状态切换逻辑：只要玩家在侦测范围，就持续追击/攻击
+        if (isPlayerInAttack)
         {
-            // 目标在攻击范围内，切换到攻击状态
+            // 玩家在攻击范围，持续攻击
             currentState = EnemyState.Attack;
         }
-        else if (hasTargetInView)
+        else if (isPlayerInDetect)
         {
-            // 目标在视野内但不在攻击范围，切换到追击状态
+            // 玩家在侦测范围但不在攻击范围，持续追击
             currentState = EnemyState.Chase;
         }
         else
         {
-            // 无目标，回到巡逻状态
+            // 玩家脱离侦测范围，回到巡逻
+            target = null;
             currentState = EnemyState.Patrol;
         }
     }
 
-    // 检测视野内是否有目标
-    private bool IsTargetInView()
+    // 检测玩家是否在圆形侦测范围内（无角度限制，纯圆形）
+    private bool IsPlayerInDetectRange()
     {
-        // 检测视野范围内的所有目标
-        Collider2D[] collidersInView = Physics2D.OverlapCircleAll(eyePoint.position, viewDistance, targetLayer);
+        // 检测圆形范围内的所有玩家
+        Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(detectCenter.position, detectRadius, targetLayer);
 
-        foreach (var collider in collidersInView)
+        foreach (var collider in collidersInRange)
         {
-            Transform potentialTarget = collider.transform;
-            // 计算目标方向
-            Vector2 directionToTarget = (potentialTarget.position - eyePoint.position).normalized;
+            Transform player = collider.transform;
+            // 检测是否有障碍物阻挡
+            RaycastHit2D hit = Physics2D.Linecast(
+                detectCenter.position,
+                player.position,
+                obstacleLayer
+            );
 
-            // 检测角度是否在视野范围内
-            float angle = Vector2.Angle(eyePoint.right, directionToTarget);
-            if (angle <= viewAngle / 2)
+            // 无障碍物则检测到玩家，持续锁定
+            if (!hit)
             {
-                // 检测是否有障碍物阻挡
-                RaycastHit2D hit = Physics2D.Raycast(
-                    eyePoint.position,
-                    directionToTarget,
-                    viewDistance,
-                    obstacleLayer
-                );
-
-                // 无障碍物则检测到目标
-                if (!hit)
-                {
-                    target = potentialTarget;
-                    return true;
-                }
+                target = player;
+                return true;
             }
         }
 
-        // 未检测到目标
+        // 未检测到玩家
         target = null;
         return false;
     }
+
+    // 检测玩家是否在攻击范围内
+    private bool IsPlayerInAttackRange()
+    {
+        if (target == null) return false;
+        return Vector2.Distance(transform.position, target.position) <= attackRange;
+    }
     #endregion
 
-    #region Gizmos可视化（调试用）
+    #region Gizmos可视化（调试用：圆形侦测范围）
     private void OnDrawGizmos()
     {
-        // 绘制巡逻范围
+        // 绘制二维巡逻区域（矩形）
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(patrolStartPos, new Vector2(patrolStartPos.x + patrolRange, patrolStartPos.y));
-        Gizmos.DrawLine(patrolStartPos, new Vector2(patrolStartPos.x - patrolRange, patrolStartPos.y));
+        Gizmos.DrawWireCube(patrolStartPos, patrolAreaSize);
 
-        // 绘制视野范围
-        if (eyePoint != null)
+        // 绘制当前巡逻目标点
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(currentPatrolTarget, 0.2f);
+
+        // 绘制圆形侦测范围（核心修改）
+        if (detectCenter != null)
         {
-            Gizmos.color = IsTargetInView() ? Color.red : Color.yellow;
-            // 绘制视野距离
-            Gizmos.DrawWireSphere(eyePoint.position, viewDistance);
-            // 绘制视野角度
-            Vector2 viewAngleA = DirectionFromAngle(-viewAngle / 2, false);
-            Vector2 viewAngleB = DirectionFromAngle(viewAngle / 2, false);
-            Gizmos.DrawLine(eyePoint.position, (Vector2)eyePoint.position + viewAngleA * viewDistance);
-            Gizmos.DrawLine(eyePoint.position, (Vector2)eyePoint.position + viewAngleB * viewDistance);
+            Gizmos.color = IsPlayerInDetectRange() ? Color.red : Color.yellow;
+            Gizmos.DrawWireSphere(detectCenter.position, detectRadius);
         }
 
         // 绘制攻击范围
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-
-    // 计算视野角度的方向向量
-    private Vector2 DirectionFromAngle(float angleInDegrees, bool angleIsGlobal)
-    {
-        if (!angleIsGlobal)
-        {
-            angleInDegrees += transform.eulerAngles.z;
-        }
-        return new Vector2(Mathf.Cos(angleInDegrees * Mathf.Deg2Rad), Mathf.Sin(angleInDegrees * Mathf.Deg2Rad));
     }
     #endregion
 }
