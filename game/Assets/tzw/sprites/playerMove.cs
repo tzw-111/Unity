@@ -19,14 +19,16 @@ public class playerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        position = transform.position;
-        position.x = position.x + horizontal * 0.1f;
-        transform.position = position;
+        playmove();
+    }
 
+    public void playmove()
+    {
+        horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         position = transform.position;
-        position.y = position.y + horizontal * 0.1f;
+        position.x = position.x + horizontal * 0.1f;
+        position.y = position.y + vertical * 0.1f;
         transform.position = position;
     }
 }

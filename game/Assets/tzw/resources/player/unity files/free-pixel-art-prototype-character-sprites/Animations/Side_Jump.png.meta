@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,217 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Side_Jump_0
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 0
+        width: 30
+        height: 67
+      alignment: 9
+      pivot: {x: 0.29095727, y: 0.0070362114}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0475da3a2b02b824e9076b55253510ef
+      internalID: -1952615786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_1
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 0
+        width: 30
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a273e4665dd4344f93bd57c80e069f6
+      internalID: 1055743528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_2
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 0
+        width: 40
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79bcba147ef2ee34ba648f60f00f800c
+      internalID: 1218222852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_3
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 0
+        width: 38
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dd727f126b030244afa21f358a83a46
+      internalID: -750738188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_4
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 7
+        width: 58
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20b44ae253df44540878b313dd714693
+      internalID: 1584448090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_5
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 8
+        width: 64
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d9b3e250172c064a8c3e8413f7103ff
+      internalID: -11869947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_6
+      rect:
+        serializedVersion: 2
+        x: 786
+        y: 13
+        width: 65
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1e9e0f17bd7ed944946b2b63991589d
+      internalID: -483745345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_7
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 3
+        width: 44
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4715c75c14851a4babd797bdf656704
+      internalID: -253294191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_8
+      rect:
+        serializedVersion: 2
+        x: 1060
+        y: 0
+        width: 33
+        height: 71
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08da9ccc0a7f7eb40bd722ef486cc27b
+      internalID: -1319962028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Side_Jump_9
+      rect:
+        serializedVersion: 2
+        x: 1186
+        y: 0
+        width: 29
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d59df69409f7e514c9b1e9646f4bd143
+      internalID: -1264214141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +329,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Side_Jump_0: -1952615786
+      Side_Jump_1: 1055743528
+      Side_Jump_2: 1218222852
+      Side_Jump_3: -750738188
+      Side_Jump_4: 1584448090
+      Side_Jump_5: -11869947
+      Side_Jump_6: -483745345
+      Side_Jump_7: -253294191
+      Side_Jump_8: -1319962028
+      Side_Jump_9: -1264214141
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
