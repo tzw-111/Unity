@@ -14851,6 +14851,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 713b33322b495794e92184973ece3034, type: 3}
+--- !u!1 &900263268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1939368271355746193, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+  m_PrefabInstance: {fileID: 7635791069632179949}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &905472685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33396,6 +33401,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1591505290857134958, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 193.38019
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 96.690094
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532852658574896035, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -31.82695
+      objectReference: {fileID: 0}
     - target: {fileID: 2752940946398811779, guid: e645d70bff59f944aac6f615f7675432, type: 3}
       propertyPath: m_Name
       value: Protagonist UI
@@ -33479,6 +33516,34 @@ PrefabInstance:
     - target: {fileID: 3073352007485923105, guid: e645d70bff59f944aac6f615f7675432, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091059376043031662, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -428.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4091059376043031662, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 224.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7921168174500843704, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -504.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 7921168174500843704, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 176.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528102988073373480, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: gameOverDelay
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528102988073373480, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: gameOverPanel
+      value: 
+      objectReference: {fileID: 900263268}
+    - target: {fileID: 8528102988073373480, guid: e645d70bff59f944aac6f615f7675432, type: 3}
+      propertyPath: mainMenuSceneName
+      value: UI Main Menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
