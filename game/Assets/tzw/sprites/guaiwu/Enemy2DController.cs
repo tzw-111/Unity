@@ -11,9 +11,13 @@ public enum EnemyState
     Dead        // 死亡
 }
 
+
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class Enemy2DController : MonoBehaviour
 {
+    [Header("动画设置")]
+    public Animator enemyAnimator; // 敌人动画控制器
+
     [Header("基础属性")]
     public float maxHealth = 100f;          // 最大生命值
     public float currentHealth;             // 当前生命值
@@ -67,6 +71,12 @@ public class Enemy2DController : MonoBehaviour
 
         // 初始化第一个巡逻目标点（添加最小距离限制）
         currentPatrolTarget = GetRandomPatrolPoint();
+
+        // 获取Animator组件（如果未手动赋值，自动获取）
+        if (enemyAnimator == null)
+        {
+            enemyAnimator = GetComponent<Animator>();
+        }
     }
 
     private void Update()
@@ -225,6 +235,12 @@ public class Enemy2DController : MonoBehaviour
     // 执行攻击
     private void AttackTarget()
     {
+        // 触发攻击动画
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("AttackTrigger");
+        }
+
         // 检测攻击范围内的目标
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange, targetLayer);
         foreach (var hitCollider in hitColliders)
@@ -248,6 +264,12 @@ public class Enemy2DController : MonoBehaviour
         // 扣血
         currentHealth -= damage;
         UnityEngine.Debug.Log("敌人受击，剩余生命值：" + currentHealth);
+
+        // 触发受击动画
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("HurtTrigger");
+        }
 
         // 血量小于等于0则死亡
         if (currentHealth <= 0)
@@ -285,6 +307,12 @@ public class Enemy2DController : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         rb.isKinematic = true;
 
+        // 触发死亡动画
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("DeadTrigger");
+        }
+
         // 播放死亡特效（如果有）
         if (deathEffect != null)
         {
@@ -315,6 +343,14 @@ public class Enemy2DController : MonoBehaviour
 
         // 4. 检测玩家是否在攻击范围内
         bool isPlayerInAttack = isPlayerInDetect && IsPlayerInAttackRange();
+
+        // 设置巡逻/追击动画参数
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetBool("IsPatrol", currentState == EnemyState.Patrol);
+            enemyAnimator.SetBool("IsChase", currentState == EnemyState.Chase);
+        }
+
 
         // 状态切换逻辑：只要玩家在侦测范围，就持续追击/攻击
         if (isPlayerInAttack)
