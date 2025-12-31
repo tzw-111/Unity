@@ -194,8 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 0}
-  maxHealth: 100
-  currentHealth: 0
+  maxHealth: 500000
+  currentHealth: 500000
   moveSpeed: 2
   patrolAreaSize: {x: 8, y: 6}
   minPatrolWaitTime: 2
@@ -210,7 +210,7 @@ MonoBehaviour:
     m_Bits: 0
   attackRange: 1.5
   attackDamage: 20
-  attackCooldown: 1
+  attackCooldown: 0.7
   hurtForce: 5
   hurtDuration: 0.5
   deathDestroyDelay: 2

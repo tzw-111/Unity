@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Security.Cryptography.X509Certificates;
 
 // 定义敌人的所有状态
 public enum EnemyState
@@ -101,12 +102,26 @@ public class Enemy2DController : MonoBehaviour
                 break;
         }
 
+        /************************************************************测试区*/
+
+                Vector2 hD = Vector2.right;
+                TakeDamage(1, hD);//受击测试
+        /**************************************************************测试区*/
+
         // 状态切换的核心检测（优先级：死亡 > 受击 > 攻击 > 追击 > 巡逻）
-        CheckStateTransitions();
+        CheckStateTransitions();    
     }
 
     private void FixedUpdate()
     {
+        // 核心修改：死亡/受击状态下，直接返回，不执行任何移动
+        if (currentState == EnemyState.Dead || currentState == EnemyState.Hurt)
+        {
+            // 双重保险：强制停移
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         // 物理相关的移动逻辑放在FixedUpdate中
         if (currentState == EnemyState.Dead || currentState == EnemyState.Hurt) return;
 
@@ -261,6 +276,10 @@ public class Enemy2DController : MonoBehaviour
     {
         if (currentState == EnemyState.Dead) return;
 
+        // 1. 受击瞬间强制停止所有移动（核心修改）
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f; // 额外防止旋转（如果有）
+
         // 扣血
         currentHealth -= damage;
         UnityEngine.Debug.Log("敌人受击，剩余生命值：" + currentHealth);
@@ -294,6 +313,7 @@ public class Enemy2DController : MonoBehaviour
         // 受击结束后回到追击/攻击（如果玩家还在范围）或巡逻
         if (currentState != EnemyState.Dead)
         {
+            rb.velocity = Vector2.zero; // 防止击退力残留
             currentState = IsPlayerInDetectRange() ? (IsPlayerInAttackRange() ? EnemyState.Attack : EnemyState.Chase) : EnemyState.Patrol;
         }
     }
@@ -338,7 +358,7 @@ public class Enemy2DController : MonoBehaviour
         // 2. 受击状态下不切换其他状态
         if (currentState == EnemyState.Hurt) return;
 
-        // 3. 检测玩家是否在圆形侦测范围内（核心修改）
+        // 3. 检测玩家是否在圆形侦测范围内
         bool isPlayerInDetect = IsPlayerInDetectRange();
 
         // 4. 检测玩家是否在攻击范围内
