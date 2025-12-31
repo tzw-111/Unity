@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-// 删除 EnemyState 定义，直接使用 Enemy2DController 中的枚举
-
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(Animator))]
 public class FlyingEyeController : MonoBehaviour
 {
     [Header("基础属性")]
@@ -41,7 +38,7 @@ public class FlyingEyeController : MonoBehaviour
     public float deathDestroyDelay = 2f;
     public GameObject deathEffect;
 
-    public EnemyState currentState; // 使用原枚举
+    public EnemyState currentState;
     private Rigidbody2D rb;
     private Animator animator;
     private Transform target;
@@ -54,7 +51,7 @@ public class FlyingEyeController : MonoBehaviour
 
         currentHealth = maxHealth;
         patrolStartPos = transform.position;
-        lastAttackTime = -attackCooldown;
+        lastAttackTime = -attackCooldown; // 初始可立即攻击
         patrolWaitTimer = 0f;
         currentPatrolTarget = GetRandomPatrolPoint();
     }
@@ -63,6 +60,10 @@ public class FlyingEyeController : MonoBehaviour
     {
         if (currentState == EnemyState.Dead) return;
 
+        //  修复1：在行为逻辑前优先处理状态转换，确保立即响应
+        CheckStateTransitions();
+
+        //  修复2：状态更新后立即应用动画参数，避免延迟
         UpdateAnimationParameters();
 
         switch (currentState)
@@ -77,18 +78,18 @@ public class FlyingEyeController : MonoBehaviour
                 AttackBehaviour();
                 break;
         }
-
-        CheckStateTransitions();
     }
 
     private void FixedUpdate()
     {
         if (currentState == EnemyState.Dead || currentState == EnemyState.Hurt) return;
 
+        //  修复3：只在移动状态更新速度，攻击状态速度由Update控制
         if (currentState == EnemyState.Patrol)
             PatrolMovement();
         else if (currentState == EnemyState.Chase)
             ChaseMovement();
+        // 攻击和受击状态不在这里设置速度，避免覆盖Update中的停止逻辑
     }
 
     #region 动画参数更新
@@ -184,6 +185,9 @@ public class FlyingEyeController : MonoBehaviour
     {
         if (target == null) return;
 
+        //  修复4：在攻击逻辑中持续保持速度为零
+        rb.velocity = Vector2.zero;
+
         if (Time.time - lastAttackTime >= attackCooldown)
         {
             nextAttackIndex = Random.Range(0, 2);
@@ -192,8 +196,6 @@ public class FlyingEyeController : MonoBehaviour
             AttackTarget();
             lastAttackTime = Time.time;
         }
-
-        rb.velocity = Vector2.zero;
     }
 
     private void AttackTarget()
@@ -201,7 +203,6 @@ public class FlyingEyeController : MonoBehaviour
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange, targetLayer);
         foreach (var hitCollider in hitColliders)
         {
-            // 使用原有的 Health 组件
             Health playerHealth = hitCollider.GetComponent<Health>();
             if (playerHealth != null)
             {
@@ -278,8 +279,14 @@ public class FlyingEyeController : MonoBehaviour
         bool isPlayerInDetect = IsPlayerInDetectRange();
         bool isPlayerInAttack = isPlayerInDetect && IsPlayerInAttackRange();
 
+        //  修复5：进入攻击范围时立即重置冷却时间，允许立刻攻击
         if (isPlayerInAttack)
         {
+            if (currentState != EnemyState.Attack)
+            {
+                lastAttackTime = Time.time - attackCooldown; // 重置冷却时间
+                rb.velocity = Vector2.zero; // 立即停止移动
+            }
             currentState = EnemyState.Attack;
         }
         else if (isPlayerInDetect)
