@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 3539321882949099419}
   - component: {fileID: 6813056490189225472}
   - component: {fileID: 2066973275160774519}
-  - component: {fileID: 3075344035964759984}
   - component: {fileID: 4569833223560229695}
+  - component: {fileID: 9011167299860854952}
+  - component: {fileID: 215319249831523141}
   m_Layer: 0
   m_Name: FlyingEye
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.8611, y: -0.1184, z: 0}
-  m_LocalScale: {x: 0.84268236, y: 0.68871444, z: 1}
+  m_LocalScale: {x: 1.2475243, y: 1.159921, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -114,19 +115,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &3075344035964759984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3440012284752931022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8e707e563a64847a9aabf2b2a6974b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
 --- !u!61 &4569833223560229695
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -156,7 +144,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.002979666, y: 0.010937586}
@@ -172,3 +160,58 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.48092782, y: 0.38435796}
   m_EdgeRadius: 0
+--- !u!95 &9011167299860854952
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3440012284752931022}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1152eabcd331c7e41a97819c289e28df, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &215319249831523141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3440012284752931022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17eb05b030accfa4c8e98c6aa70c2f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  moveSpeed: 2
+  patrolAreaSize: {x: 8, y: 6}
+  minPatrolWaitTime: 2
+  maxPatrolWaitTime: 4
+  detectRadius: 2
+  detectCenter: {fileID: 0}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  attackRange: 1
+  attackDamage: 20
+  attackCooldown: 1
+  hurtForce: 5
+  hurtDuration: 0.5
+  deathDestroyDelay: 2
+  deathEffect: {fileID: 0}
+  currentState: 0
