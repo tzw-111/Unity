@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Security.Cryptography.X509Certificates;
 
 // 定义敌人的所有状态
 public enum EnemyState
@@ -11,9 +12,13 @@ public enum EnemyState
     Dead        // 死亡
 }
 
+
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class Enemy2DController : MonoBehaviour
 {
+    [Header("动画设置")]
+    public Animator enemyAnimator; // 敌人动画控制器
+
     [Header("基础属性")]
     public float maxHealth = 100f;          // 最大生命值
     public float currentHealth;             // 当前生命值
@@ -67,6 +72,12 @@ public class Enemy2DController : MonoBehaviour
 
         // 初始化第一个巡逻目标点（添加最小距离限制）
         currentPatrolTarget = GetRandomPatrolPoint();
+
+        // 获取Animator组件（如果未手动赋值，自动获取）
+        if (enemyAnimator == null)
+        {
+            enemyAnimator = GetComponent<Animator>();
+        }
     }
 
     private void Update()
@@ -91,12 +102,26 @@ public class Enemy2DController : MonoBehaviour
                 break;
         }
 
+        /************************************************************测试区*/
+
+                Vector2 hD = Vector2.right;
+                TakeDamage(1, hD);//受击测试
+        /**************************************************************测试区*/
+
         // 状态切换的核心检测（优先级：死亡 > 受击 > 攻击 > 追击 > 巡逻）
-        CheckStateTransitions();
+        CheckStateTransitions();    
     }
 
     private void FixedUpdate()
     {
+        // 核心修改：死亡/受击状态下，直接返回，不执行任何移动
+        if (currentState == EnemyState.Dead || currentState == EnemyState.Hurt)
+        {
+            // 双重保险：强制停移
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         // 物理相关的移动逻辑放在FixedUpdate中
         if (currentState == EnemyState.Dead || currentState == EnemyState.Hurt) return;
 
@@ -225,6 +250,12 @@ public class Enemy2DController : MonoBehaviour
     // 执行攻击
     private void AttackTarget()
     {
+        // 触发攻击动画
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("AttackTrigger");
+        }
+
         // 检测攻击范围内的目标
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange, targetLayer);
         foreach (var hitCollider in hitColliders)
@@ -245,9 +276,19 @@ public class Enemy2DController : MonoBehaviour
     {
         if (currentState == EnemyState.Dead) return;
 
+        // 1. 受击瞬间强制停止所有移动（核心修改）
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f; // 额外防止旋转（如果有）
+
         // 扣血
         currentHealth -= damage;
         UnityEngine.Debug.Log("敌人受击，剩余生命值：" + currentHealth);
+
+        // 触发受击动画
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("HurtTrigger");
+        }
 
         // 血量小于等于0则死亡
         if (currentHealth <= 0)
@@ -272,6 +313,7 @@ public class Enemy2DController : MonoBehaviour
         // 受击结束后回到追击/攻击（如果玩家还在范围）或巡逻
         if (currentState != EnemyState.Dead)
         {
+            rb.velocity = Vector2.zero; // 防止击退力残留
             currentState = IsPlayerInDetectRange() ? (IsPlayerInAttackRange() ? EnemyState.Attack : EnemyState.Chase) : EnemyState.Patrol;
         }
     }
@@ -284,6 +326,12 @@ public class Enemy2DController : MonoBehaviour
         // 禁用碰撞体和刚体（可选）
         GetComponent<Collider2D>().enabled = false;
         rb.isKinematic = true;
+
+        // 触发死亡动画
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetTrigger("DeadTrigger");
+        }
 
         // 播放死亡特效（如果有）
         if (deathEffect != null)
@@ -310,11 +358,19 @@ public class Enemy2DController : MonoBehaviour
         // 2. 受击状态下不切换其他状态
         if (currentState == EnemyState.Hurt) return;
 
-        // 3. 检测玩家是否在圆形侦测范围内（核心修改）
+        // 3. 检测玩家是否在圆形侦测范围内
         bool isPlayerInDetect = IsPlayerInDetectRange();
 
         // 4. 检测玩家是否在攻击范围内
         bool isPlayerInAttack = isPlayerInDetect && IsPlayerInAttackRange();
+
+        // 设置巡逻/追击动画参数
+        if (enemyAnimator != null)
+        {
+            enemyAnimator.SetBool("IsPatrol", currentState == EnemyState.Patrol);
+            enemyAnimator.SetBool("IsChase", currentState == EnemyState.Chase);
+        }
+
 
         // 状态切换逻辑：只要玩家在侦测范围，就持续追击/攻击
         if (isPlayerInAttack)
