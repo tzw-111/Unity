@@ -585,6 +585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transition: {fileID: 9099001247276316103}
   transitionTime: 1
+  triggerTag: Player
 --- !u!1 &7048716490176233004
 GameObject:
   m_ObjectHideFlags: 0
