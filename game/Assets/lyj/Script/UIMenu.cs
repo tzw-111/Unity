@@ -9,7 +9,7 @@ public class UIMenu : MonoBehaviour
     {
         // 加载名为"GameScene"的场景（需先在Build Settings中添加该场景）
         // 替换成你自己的游戏场景名称
-        SceneManager.LoadScene("SC Demo");
+        SceneManager.LoadScene("SceneA");
     }
 
     // 退出游戏按钮点击事件
